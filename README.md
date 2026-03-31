@@ -25,3 +25,16 @@
 * That is, if an entry $(k, null)$ ecists in a map, then operation <code>get(k)</code> will return null, not because it couldn't find the key, but because it found the key and is returning its associated value.
 * Some implementations of the <code>java.util.Map</code> interface explicitly forbid use of a null value, and null keys.
 * However, to resolve the ambiguity when null is allowable, the interface contanins a boolean method, <code>containsKet(k)</code> to definitively check whether k exists as a key.
+
+## 💻 Application: Counting Word Frequencies
+* Consider the problem of counting the number of occurances of words in a document.
+* A map is an ideal data structure for use here, for we can use words as keys and word counts as values.
+* We begin with an empty map, mapping words to their integer frequencies.
+* We first scan through the input, considering adjacent alphabetic characters to be words, which we then convert to lowercase/
+* For each word found, we attempt to retrieve its current frequency from the map using the get method, with a yet unseen word having frequency zero.
+* We then (re)set its frequency to be one more to reflect the current occurance of the word.
+* After processing the entire input, we loop through the entrySet() of the map to determine which word has most occurances.
+* 📁 <b>Project Folder:</b> [Here](https://github.com/thabang-m-modiba/MapsADT/tree/068646ab703e94c0fa3da96c8e59a241edd024a8/WordCount)
+
+## Unsorted Map
+* An unsorted map is a type of map data structure that stores key-value pairs without maintaining any particular order among keys.
