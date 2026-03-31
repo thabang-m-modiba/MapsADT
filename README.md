@@ -34,8 +34,34 @@
 * For each word found, we attempt to retrieve its current frequency from the map using the get method, with a yet unseen word having frequency zero.
 * We then (re)set its frequency to be one more to reflect the current occurance of the word.
 * After processing the entire input, we loop through the entrySet() of the map to determine which word has most occurances.
-* 📁 <b>Project Folder:</b> [Here](https://github.com/thabang-m-modiba/MapsADT/tree/068646ab703e94c0fa3da96c8e59a241edd024a8/WordCount)
+* 📁 <b>Project Folder: </b> [Here](https://github.com/thabang-m-modiba/MapsADT/tree/068646ab703e94c0fa3da96c8e59a241edd024a8/WordCount)
 
-## Unsorted Map
+## 💻 Unsorted Map
 * An unsorted map is a type of map data structure that stores key-value pairs without maintaining any particular order among keys.
 * 📁 <b>Project Folder: </b> [Here](https://github.com/thabang-m-modiba/MapsADT/tree/0cd5d8f38f8230b043445e98936825e7395cf6e4/UnsortedMaps)
+
+## Hash Tables
+* A map supports the abstraction of using keys as "addresses" that help locate an entry.
+* Consider a restricted setting in which a map with n entries uses keys that are known to be integers in a range from 0 to $N-1$ for some $N>=n$.
+* In this case, we can represent a map using a lookup table of length $N$, where we store the value associated with key $k$ at index $k$ of the table, presuming that we have a distinct way to represent an empty slot.
+* Basic map operations <code>get, put and remove</code> can be implemented in $O(1)$ worst-case time.
+* There are two challenges in extending this framework to the more general setting of a map.
+  1. We may not wish to devote an array of length $N$ if it is the case that $N >> n$.
+  2. We do not in general require that a map's keys be integers.
+* The novel concept of a hash table is the use of a <b>hash function</b> to map general keys to corresponding indices in a table.
+* Ideally, keys will be well distributed in the range from 0 to $N - 1$ by a hash function, but in practice there may be two or more distinct keys that get mapped to the same index.
+* As a result, we will conceptualize our table as a <b>bucket array</b>, in which each bucket may manage a collection of <b>entries</b> that are sent to a specific index by the hash function.
+  * An empty bucket may be replaced by a null reference.
+
+### Hash Functions
+* The goal of a hash function, $h$, is to map each key $k$ to an integer in the ranhe $[0, N - 1]$, where $N$ is the capacity of the bucket array for a hash table.
+* The main idea of this approach is to use the hash function value, $h(k)$, as an index into out bucket array, A, instead of the key $k$, which may not be appropriate for direct use as an index. That is, we store the entry $(k, v)$ in the bucket $A[h(k)]$.
+* If there are two or more keys with the same hash value, then two different entries will be mapped to the same bucket in $A$.
+* In this case, we say that a <b>collision</b> has occured.
+* There are ways of dealing with collisions, but the best strategy is to try avoid them in the first place.
+* A good hash fucntion sufficiently avoids collisions.
+* It is common to view the evaluation of a hash function, $h(k)$, as consisting of two portions:
+  1. Hash code - maos a key $k$ to an integer.
+  2. Compression function - maps the has code to an integer within a range of indices, $[0, N - ]$ for a bucket array.
+ 
+* 
