@@ -61,7 +61,29 @@
 * There are ways of dealing with collisions, but the best strategy is to try avoid them in the first place.
 * A good hash fucntion sufficiently avoids collisions.
 * It is common to view the evaluation of a hash function, $h(k)$, as consisting of two portions:
-  1. Hash code - maos a key $k$ to an integer.
-  2. Compression function - maps the has code to an integer within a range of indices, $[0, N - ]$ for a bucket array.
+  1. <b>Hash code</b> - maos a key $k$ to an integer.
+  2. <b>Compression function</b> - maps the has code to an integer within a range of indices, $[0, N - ]$ for a bucket array.
  
-* 
+* The advantage of spreading the hash function into rwo such components is that the has code porion of that computation is independent of a specific has table size.
+* This allows the development of a general has code for each object that can be used for a has table of any size.
+* Only the compression function depends upon the table size.
+* This is particularly convinient, because the underlying bucket array for a hash table may be dynamically resized, depending on the number of entries currently stored in the map.
+
+#### Hash Codes
+* The first action that a <b>hash function</b> perfoems is to take an arbitrary key $k$ in out map and compute an integer that is called the <b>hash code</b> for $k$.
+* This integer need not be in a range $[0, N-1]$, and may even be negative.
+* We desire that the set of hash codes assigned to our keys should avoid collisions.
+* For if the has codes of our keys cause collisions, then there is no hope for our <b>compression function</b> to avoid them.
+* Below are some different approaches to the implementation of has codes:
+  - Treating the Bit representation as an integer
+  - Polynomial hash codes
+  - Cyclic-Shift hash codes
+#### Hash Codes in Java
+* The notion of hash codes are an internal part of the java language.
+* The <code>Object</code> class, which serves as an ancestor of all Object types, includes a default <code>hashCode()</code> method that returns a 32-bit int, which serves as an object's hasg code.
+* The default version of <code>hashCode()</code> provided by the Object class is oftern just an integer reprresentation derived from the object's memory.
+* However, we must be careful if relying on the default version of <code>hashCode()</code> when authoring a class.
+* for hashing schemes to be reliable, it is imperative that any two objects that are viewed as "equal" to each other have the same hash code.
+* Thius is important because, if an entry is inserted into a map, and a later search is performed on a key that is considered equivalent to that entry's key, the map must recognize this as a match.
+* Therefore, when using a hash table to implement a map, we want equivalent keys to have the same hash code so that they are guaranteed to map to the same bucket.
+* More formally, if a class defines equivalence through the equals method, then that class should also provide a consistent implementation of the hashCode method, such that if <code>x.equald(y)</code>, then <code>x.hashCode() == y.hashCode()</code>.
