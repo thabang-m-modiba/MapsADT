@@ -104,3 +104,39 @@
 * The MAD Method (Multiply-Add-and-Divide) is a more sophisticated compression function, which helps eliminate repeated patterns in a set of integer keys.
 * This method maps an integer $i$ to $[(ai+b) mod p] mod N$, and $a$ and $b$ are integers chosen at random from the interval $[0, p-1]$, with $a>0$.
 * This  compression function is chosen in order to eliminate repeated patterns in the set of hash codes and get us closer to having a good hash function.
+
+### 💻 Java Hash Table Implementation
+* We develop two implementations of a hash table.
+  1. Using separate chaining
+  2. Using open addressing with linear probing
+* While these approaches to collsion resolution are uite different, there are mny higher level commonalities to the two hashing algorithms.
+* In our design, the <code>AbstractHashMap</code> extends the <code>AbstractMap</code> class, which provides much of the functionality common to our two hash table implementation.
+* The <code>AbstractHashMap</code> class does not provide any concrete representation of a table of "buckets".
+* With separate chaining, each bucket will be a secondary map, and with open addressing, there is no tangible container for each bucket (buckets are effectively interleaved due to the probing sequences).
+* The <code>AbstractHashMap</code> class presumes the following to be abstract methods, to be implemented by each concrete subclass:
+  - <code><b>createTable()</b> // This method creates an initial empty table having size equal to a designated capacity instance variable.</code>
+  - <code<b>>bucketGet(h, k)</b> // This method mimics the public get() method, but for a key k that is known to hash to bucket h</code>
+  - <code><b>bucketPut(h, k, v)</b> // This method mimics the public put() method, but for a key k that is known to hash to bucket h</code>
+  - <code><b>bucketRemove(h, k)</b> // This method mimics the publiv remove() method, but for a key k known to hash to bucket h</code>
+  - <code><b>entrySet()</b> // This standard map method iterates through all entries of the map.</code>
+
+* The <code>AbstractHashMap</code> class does provide a mathematical support in the form of a hash compression function using a randomized MAD formula and support for automatically resizing the underlying hash table when the load factor reaches a certain threshold.
+* The hashValue method relies on an original key's hash code, as returned by its <code>hashCode()</code> method, followed by MAD compression based on a prime number and the scale and shift parameters that are randomly chosen in the constructor.
+* To manage the load factor, the <code>AbstractHashMap</code> class declares a protected memberm $n$, which should equal the current number of entries in the map, however, it must rely on the subclasses to update this field from withim methods <code>bucketPut</code> and <code>bucketRemove</code>.
+* If the load factor of the table increases beyond 0.5, we request a bigger table using the <code>createTable</code> method and reinsert all entries into the new table.
+
+#### Separate Chaining
+* To represent each bucket for separate chaining we use instance of the simpler <code>UnsortedTableMap</code> class.
+* This technique, in which we use a simple solution to a problem to create a new, more advanced solution is known as <b>bootstrapping</b>.
+* The advantage of using a map for each bucket is that it becomes easy to delegate responsibilities for top-level map operations to the appropriate bucket.
+* the entire hash table is then represented as a fixed-capacity array A of the secondary maps.
+* Each cell $A[h]$ is initially a null reference.
+* We only create a secondary map when an entry is first hashed to a particular bucket.
+* As a general rule, we implement <code>bucketGet(h, k)</code> by calling <code>A[h].get(k)</code>, we implement <code>bucketPut(h, k, v)</code> by calling <code>A[h].put(k)</code>, and <code>bucketRemove(h, k)</code> by calling <code>A[h].remove(k)</code>.
+* However, we need to be careful for the following reasons:
+  - Because we choose to leave table cells as null until secondary map is needed, each of these fundamental operations must begin by checking to see if <code>A[h]</code> is null.
+    * In the case of <code>bucketGet</code> and <code>bucketRemove</code>, if the bucket does not yet exist, we can simply return null as there can not be an entry matching key $k$.
+    * In the case of <code>bucketPut</code>, a new entry must be inserted, so we instantiate a new <code>UnsortedTableMap</code> for $A[h]$ before continuing.
+  - In out <code>AbstractHashMap</code> framework, the subclass has the responsibility to properly maintain the instance variable $n$ when an entry is newly inserted or deleted.
+    * In out implementation, we determine the change in the overall size of the map, by determining if there is any change in the size of the relevant secondary mao before and after an operation.
+    * In our design, <code>ChainHashMap</code> class implements a hash table with seprate chaining.
