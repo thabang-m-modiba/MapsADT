@@ -69,7 +69,7 @@
 * Only the compression function depends upon the table size.
 * This is particularly convinient, because the underlying bucket array for a hash table may be dynamically resized, depending on the number of entries currently stored in the map.
 
-#### Hash Codes [Folder](https://github.com/thabang-m-modiba/MapsADT/tree/2aee2a93659cafec33cad1a78cf4160842925a26/HashTables)
+#### Hash Codes ([Folder Here](https://github.com/thabang-m-modiba/MapsADT/tree/2aee2a93659cafec33cad1a78cf4160842925a26/HashTables))
 * The first action that a <b>hash function</b> perfoems is to take an arbitrary key $k$ in out map and compute an integer that is called the <b>hash code</b> for $k$.
 * This integer need not be in a range $[0, N-1]$, and may even be negative.
 * We desire that the set of hash codes assigned to our keys should avoid collisions.
