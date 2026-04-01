@@ -150,4 +150,17 @@
 * Therefore we must search beyond any occurrences of the DEFUNCT sentinel when inserting.
 * However, if no match is found, we prefer to repurpose the first slot marked with DEFUNCT, if any, when placing the new element in the table.
 * The <code>findSlot</code> method enacts this logic, continuing an unsuccessful search until finding a truly empty slot, and returning the index of the first available slot for an insertion.
-* When deleting an existing entry within <code>bucketRemove</code>, we intentionally set the table entry to the DEFUNCT sentinel in accordance with our strategy. 
+* When deleting an existing entry within <code>bucketRemove</code>, we intentionally set the table entry to the DEFUNCT sentinel in accordance with our strategy.
+
+## 💻 Sorted Maps
+* The traditional map ADT allows users to look up the value associated with a given key, but the serach for that key is a form known as an exact search.
+* The sorted map ADT includes all behaviors of the standard map, plus the following operations:
+  - <code><b>firstEntry()</b> // Method returns the entry with smallest key value, or null if the map is empty</code>
+  - <code><b>lastEntry()</b> // Method returns the entry with largest key value, or null if the map is empty</code>
+  - <code><b>ceilingEntry(k)</b> // Method returns the entry with the least key value less than or equal to k, or null of no such key exists</code>
+  - <code><b>floorEntry(k)</b> // Method returns the entry with the greatest key value less than or uqual to k, or null us no such entry exits</code>
+  - <code><b>lowerEntry(k)</b> // Method retuens the entry with the greatest key value strictly less than k, or null if no such entry exists</code>
+  - <code><b>higherEntry(k)</b> // Method returns the entry with the least key value strictly greater than k, or null if no such entry exists</code>
+  - <code><b>subMap(k1, k2)</b> // Method returns an iteration of all entries with key greater than or equal to k1, but strictly less than k2</code>
+
+* The above methods are included with the <code>java.util.NavigableMap</code> interface, which ectends the simpler <code>java.util.SortedMap</code> interface.
