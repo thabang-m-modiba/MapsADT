@@ -140,3 +140,14 @@
   - In out <code>AbstractHashMap</code> framework, the subclass has the responsibility to properly maintain the instance variable $n$ when an entry is newly inserted or deleted.
     * In out implementation, we determine the change in the overall size of the map, by determining if there is any change in the size of the relevant secondary mao before and after an operation.
     * In our design, <code>ChainHashMap</code> class implements a hash table with seprate chaining.
+#### Linear Probing
+* For the design of <code>ProbeHashMap</code> class, in order to support deletions, we use a technique in which we place a special marker in a table location at which an entry has been deleted, so that we can distinguish between it and a location that has always been empty.
+* To this end, we create a dixed entry instance, DEFUNCT, as a sentinel, and use references to that instance to mark vacared cells.
+* The most challenging aspect of open addressing is to properly trace the series of probes when collisions occur during a search for an existing entry, or placement of a new entry.
+* To this end,the three primary map operations each rely on a utility, findSlot, that searches for an entry with key $k$ in "bucket" $h$.
+* When attempting to retrieve the value associated with a given key, we must continue probing until we find the key, or until we reach a table slot with a null reference. We cannot stop the search upon reaching an DEFUNCT sentinel, because it represents a location that may have been filled at the time the desired entry was once inserted.
+* When a key-value pair is being placed in the map, we must first attempt to find an existing entry with the given key, so that we might overwrite its value.
+* Therefore we must search beyond any occurrences of the DEFUNCT sentinel when inserting.
+* However, if no match is found, we prefer to repurpose the first slot marked with DEFUNCT, if any, when placing the new element in the table.
+* The <code>findSlot</code> method enacts this logic, continuing an unsuccessful search until finding a truly empty slot, and returning the index of the first available slot for an insertion.
+* When deleting an existing entry within <code>bucketRemove</code>, we intentionally set the table entry to the DEFUNCT sentinel in accordance with our strategy. 
