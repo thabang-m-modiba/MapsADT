@@ -93,3 +93,14 @@
 * Thus, once we have determined an integer hash code for a key $k$, there is still the issue of mapping that integer into the range $[0, N-1]$.
 * Compression function is the second action performed as part of an obverall hash function.
 * A good compression function minimizes the number of collisions.
+
+##### The Division Method
+* The devision method is a simple compression function, which maps an integer $i$ to $i mod N$, where $N$, the size of the bucket array, is a fixed positive integer.
+* If we take $N$ to be a prime number, then this compression function helps "spread out" the distribution of hashed values.
+* If $N$ is not a prime number, then there is a greater risk that patterns in the distribution of hash codes will be repeated in the distribution of hash values, thereby causing collisions.
+* If a hash function is choosen well, then it should ensure that the probability of two different keys getting hashed to the same bucket is $1/N$.
+
+##### The MAD Method
+* The MAD Method (Multiply-Add-and-Divide) is a more sophisticated compression function, which helps eliminate repeated patterns in a set of integer keys.
+* This method maps an integer $i$ to $[(ai+b) mod p] mod N$, and $a$ and $b$ are integers chosen at random from the interval $[0, p-1]$, with $a>0$.
+* This  compression function is chosen in order to eliminate repeated patterns in the set of hash codes and get us closer to having a good hash function.
