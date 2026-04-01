@@ -87,3 +87,9 @@
 * Thius is important because, if an entry is inserted into a map, and a later search is performed on a key that is considered equivalent to that entry's key, the map must recognize this as a match.
 * Therefore, when using a hash table to implement a map, we want equivalent keys to have the same hash code so that they are guaranteed to map to the same bucket.
 * More formally, if a class defines equivalence through the equals method, then that class should also provide a consistent implementation of the hashCode method, such that if <code>x.equald(y)</code>, then <code>x.hashCode() == y.hashCode()</code>.
+
+#### Compression Functions
+* The hash code for a key $k$ will typically not be suitable for immediate use with a bucket array, because the integer hash code may be negative or may exceed the capacity of the bucket array.
+* Thus, once we have determined an integer hash code for a key $k$, there is still the issue of mapping that integer into the range $[0, N-1]$.
+* Compression function is the second action performed as part of an obverall hash function.
+* A good compression function minimizes the number of collisions.
