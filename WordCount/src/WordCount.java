@@ -1,7 +1,6 @@
 /**
  * @author Textbook: Data Structures and Algorithms in Java 6th Edition 2014
  */
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 /**
@@ -14,10 +13,11 @@ public class WordCount {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-        Map<String, Integer> freq = new ChainHashMap<>();
+		ChainHashMap<String, Integer> freq = new ChainHashMap<>();
         
         // Scan input for words, using all nonletters as delimiters
         Scanner doc = new Scanner(System.in).useDelimiter("[^a-zA-Z]+");
+        // System.out.print("Enter: ");
         while(doc.hasNext()) {
         	String word = doc.next().toLowerCase();
         	Integer count = freq.get(word);
@@ -26,6 +26,7 @@ public class WordCount {
         	}
         	freq.put(word, 1 + count);
         }
+        doc.close();
         int maxCount = 0;
         String maxWord = "no word";
         for(Entry<String, Integer> ent : freq.entrySet()) {
@@ -36,6 +37,10 @@ public class WordCount {
         	System.out.print("The most frequent word is " + maxWord);
         	System.out.println(", with " + maxCount + " occurances.");
         }
+        
+        /**
+         * Fix code bugs
+         */
 
 	}
 
