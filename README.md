@@ -49,9 +49,9 @@ entrySet() // Method returns an iterable collection containing all the key-value
 
 ## Hash Tables
 * A map supports the abstraction of using keys as "addresses" that help locate an entry.
-* Consider a restricted setting in which a map with n entries uses keys that are known to be integers in a range from 0 to $N-1$ for some $N>=n$.
+* Consider a restricted setting in which a map with n entries uses keys that are known to be integers in a range from 0 to $N - 1$ for some $N>=n$.
 * In this case, we can represent a map using a lookup table of length $N$, where we store the value associated with key $k$ at index $k$ of the table, presuming that we have a distinct way to represent an empty slot.
-* Basic map operations <code>get, put and remove</code> can be implemented in $O(1)$ worst-case time.
+* Basic map operations <code>get</code>, <code>put</code> and <code>remove</code> can be implemented in $O(1)$ worst-case time.
 * There are two challenges in extending this framework to the more general setting of a map.
   1. We may not wish to devote an array of length $N$ if it is the case that $N >> n$.
   2. We do not in general require that a map's keys be integers.
@@ -59,6 +59,7 @@ entrySet() // Method returns an iterable collection containing all the key-value
 * Ideally, keys will be well distributed in the range from 0 to $N - 1$ by a hash function, but in practice there may be two or more distinct keys that get mapped to the same index.
 * As a result, we will conceptualize our table as a <b>bucket array</b>, in which each bucket may manage a collection of <b>entries</b> that are sent to a specific index by the hash function.
   * An empty bucket may be replaced by a null reference.
+  * A bucket array is basically just a linked list.
 
 ### Hash Functions
 * The goal of a hash function, $h$, is to map each key $k$ to an integer in the range $[0, N - 1]$, where $N$ is the capacity of the bucket array for a hash table.
@@ -66,21 +67,21 @@ entrySet() // Method returns an iterable collection containing all the key-value
 * If there are two or more keys with the same hash value, then two different entries will be mapped to the same bucket in $A$.
 * In this case, we say that a <b>collision</b> has occured.
 * There are ways of dealing with collisions, but the best strategy is to try avoid them in the first place.
-* A good hash fucntion sufficiently avoids collisions.
+* A good hash function sufficiently avoids collisions.
 * It is common to view the evaluation of a hash function, $h(k)$, as consisting of two portions:
   1. <b>Hash code</b> - maps a key $k$ to an integer.
-  2. <b>Compression function</b> - maps the has code to an integer within a range of indices, $[0, N - ]$ for a bucket array.
+  2. <b>Compression function</b> - maps the has code to an integer within a range of indices, $[0, N - 1]$ for a bucket array.
  
 * The advantage of spreading the hash function into two such components is that the has code porion of that computation is independent of a specific hash table size.
-* This allows the development of a general has code for each object that can be used for a has table of any size.
+* This allows the development of a general hash code for each object that can be used for a hash table of any size.
 * Only the compression function depends upon the table size.
 * This is particularly convinient, because the underlying bucket array for a hash table may be dynamically resized, depending on the number of entries currently stored in the map.
 
 #### Hash Codes (📁 [Folder Here](https://github.com/thabang-m-modiba/MapsADT/tree/2aee2a93659cafec33cad1a78cf4160842925a26/HashTables))
 * The first action that a <b>hash function</b> performs is to take an arbitrary key $k$ in out map and compute an integer that is called the <b>hash code</b> for $k$.
-* This integer need not be in a range $[0, N-1]$, and may even be negative.
-* We desire that the set of hash codes assigned to our keys should avoid collisions.
-* For if the has codes of our keys cause collisions, then there is no hope for our <b>compression function</b> to avoid them.
+* It is not a requirement for this integer to be in a range $[0, N-1]$, and may even be negative.
+* We desire that the set of hash codes assigned to our keys should avoid collisions. i.e., they should be different.
+* For if the hash codes of our keys cause collisions, then there is no hope for our <b>compression function</b> to avoid them.
 * Below are some different approaches to the implementation of hash codes:
   - Treating the Bit representation as an integer
   - Polynomial hash codes
@@ -137,8 +138,8 @@ entrySet() // This standard map method iterates through all entries of the map.
 #### Separate Chaining
 * To represent each bucket for separate chaining we use instance of the simpler <code>UnsortedTableMap</code> class.
 * This technique, in which we use a simple solution to a problem to create a new, more advanced solution is known as <b>bootstrapping</b>.
-* The advantage of using a map for each bucket is that it becomes easy to delegate responsibilities for top-level map operations to the appropriate bucket.
-* the entire hash table is then represented as a fixed-capacity array A of the secondary maps.
+* The advantage of <b>using a map for each bucket</b> is that it becomes easy to delegate responsibilities for top-level map operations to the appropriate bucket.
+* The entire hash table is then represented as a fixed-capacity array A of the secondary maps.
 * Each cell $A[h]$ is initially a null reference.
 * We only create a secondary map when an entry is first hashed to a particular bucket.
 * As a general rule, we implement <code>bucketGet(h, k)</code> by calling <code>A[h].get(k)</code>, we implement <code>bucketPut(h, k, v)</code> by calling <code>A[h].put(k)</code>, and <code>bucketRemove(h, k)</code> by calling <code>A[h].remove(k)</code>.
@@ -146,9 +147,9 @@ entrySet() // This standard map method iterates through all entries of the map.
   - Because we choose to leave table cells as null until secondary map is needed, each of these fundamental operations must begin by checking to see if <code>A[h]</code> is null.
     * In the case of <code>bucketGet</code> and <code>bucketRemove</code>, if the bucket does not yet exist, we can simply return null as there can not be an entry matching key $k$.
     * In the case of <code>bucketPut</code>, a new entry must be inserted, so we instantiate a new <code>UnsortedTableMap</code> for $A[h]$ before continuing.
-  - In out <code>AbstractHashMap</code> framework, the subclass has the responsibility to properly maintain the instance variable $n$ when an entry is newly inserted or deleted.
-    * In out implementation, we determine the change in the overall size of the map, by determining if there is any change in the size of the relevant secondary mao before and after an operation.
-    * In our design, <code>ChainHashMap</code> class implements a hash table with seprate chaining.
+  - In our <code>AbstractHashMap</code> framework, the subclass has the responsibility to properly maintain the instance variable $n$ when an entry is newly inserted or deleted.
+    * In our implementation, we determine the change in the overall size of the map, by determining if there is any change in the size of the relevant secondary map before and after an operation.
+    * 📝 In our design, <code>ChainHashMap</code> class implements a hash table with separate chaining.
 #### Linear Probing
 * For the design of <code>ProbeHashMap</code> class, in order to support deletions, we use a technique in which we place a special marker in a table location at which an entry has been deleted, so that we can distinguish between it and a location that has always been empty.
 * To this end, we create a dixed entry instance, DEFUNCT, as a sentinel, and use references to that instance to mark vacared cells.
@@ -162,14 +163,16 @@ entrySet() // This standard map method iterates through all entries of the map.
 * When deleting an existing entry within <code>bucketRemove</code>, we intentionally set the table entry to the DEFUNCT sentinel in accordance with our strategy.
 
 ## 💻 Sorted Maps
-* The traditional map ADT allows users to look up the value associated with a given key, but the serach for that key is a form known as an exact search.
+* The traditional map ADT allows users to look up the value associated with a given key, but the search for that key is a form known as an exact search.
 * The sorted map ADT includes all behaviors of the standard map, plus the following operations:
-  - <code><b>firstEntry()</b> // Method returns the entry with smallest key value, or null if the map is empty</code>
-  - <code><b>lastEntry()</b> // Method returns the entry with largest key value, or null if the map is empty</code>
-  - <code><b>ceilingEntry(k)</b> // Method returns the entry with the least key value less than or equal to k, or null of no such key exists</code>
-  - <code><b>floorEntry(k)</b> // Method returns the entry with the greatest key value less than or uqual to k, or null us no such entry exits</code>
-  - <code><b>lowerEntry(k)</b> // Method retuens the entry with the greatest key value strictly less than k, or null if no such entry exists</code>
-  - <code><b>higherEntry(k)</b> // Method returns the entry with the least key value strictly greater than k, or null if no such entry exists</code>
-  - <code><b>subMap(k1, k2)</b> // Method returns an iteration of all entries with key greater than or equal to k1, but strictly less than k2</code>
+```
+  firstEntry() // Method returns the entry with smallest key value, or null if the map is empty
+  lastEntry() // Method returns the entry with largest key value, or null if the map is empty
+  ceilingEntry(k) // Method returns the entry with the least key value less than or equal to k, or null if no such key exists
+  floorEntry(k) // Method returns the entry with the greatest key value less than or uqual to k, or null us no such entry exits
+  lowerEntry(k) // Method returns the entry with the greatest key value strictly less than k, or null if no such entry exists
+  higherEntry(k)</b> // Method returns the entry with the least key value strictly greater than k, or null if no such entry exists
+subMap(k1, k2) // Method returns an iteration of all entries with key greater than or equal to k1, but strictly less than k2
+```
 
-* The above methods are included with the <code>java.util.NavigableMap</code> interface, which ectends the simpler <code>java.util.SortedMap</code> interface.
+* The above methods are included with the <code>java.util.NavigableMap</code> interface, which extends the simpler <code>java.util.SortedMap</code> interface.
