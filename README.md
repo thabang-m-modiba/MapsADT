@@ -1,15 +1,15 @@
 # Maps with Java
 * A map is an abstract data type designed to efficiently store and retrieve values based upon a uniquely identifying <b>search key</b> for each.
-* Specifically,  a map stores key value pairs $(k, v)$, which we call entries, where $k$ is the key and $v$ is its corresponding value.
+* Specifically,  a map stores key-value pairs $(k, v)$, which we call entries, where $k$ is the key and $v$ is its corresponding value.
 * Keys are required to be unique, so that the association of keys to values define a mapping.
 * Maps are also known as associative arrays, because the entry's key serves somewhat like an index into the map, in that it assists the map in efficiently locating the associated entry.
-* However, unlike a standard array, a key in a map need not be numeric, and it does not directly designate a position within the structure.
+* However, unlike a standard array, a key in a map is not required to be numeric, and it does not directly designate a position within the structure.
 * Common application of maps is in DNSs.
 
 ## The Map ADT
 * As an ADT, a map supports the following operations:
 ```
-<code>size() // Method returns the number of entries in map M
+<code><b>size()</b> // Method returns the number of entries in map M
 isEmpty() // Method returns a boolean indicating whether the mao is empty
 get(k) // Method returns the value v associated with key k, if such entry exists. Otherwise returns null
 put(k, v) // If M does not have an entry with key k, then the method adds entry (k, v) to M and return null; else, replace with v the existing value of the entry with key equal to k and return the old value
