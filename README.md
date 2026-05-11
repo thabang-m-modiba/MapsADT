@@ -9,15 +9,21 @@
 ## The Map ADT
 * As an ADT, a map supports the following operations:
 ```
-<code><b>size()</b> // Method returns the number of entries in map M
+/*** Auxiliary Methods ***/
+size() // Method returns the number of entries in map M
 isEmpty() // Method returns a boolean indicating whether the mao is empty
+
+/*** Main methods ***/
 get(k) // Method returns the value v associated with key k, if such entry exists. Otherwise returns null
-put(k, v) // If M does not have an entry with key k, then the method adds entry (k, v) to M and return null; else, replace with v the existing value of the entry with key equal to k and return the old value
-remove(k) // Method removes from M the entry with key k, and return its value. If M has no such entry, then return null
-keySet() // Method returns an iterable collection containing all the keys stored in M
-values() // Method returns an iterable collection containing all the values of entries stored in M, with repetition of multiple keys map to the same value
-entrySet() // Method returns an iterable collection containing all the key-value entries in M
+put(k, v) // If Map M does not have an entry with key k, then the method adds entry (k, v) to M and return null; else, replace with v the existing value of the entry with key equal to k and return the old value
+remove(k) // Method removes from Map M the entry with key k, and return its value. If M has no such entry, then return null
+keySet() // Method returns an iterable collection containing all the keys stored in Map M
+values() // Method returns an iterable collection containing all the values of entries stored in Map M, with repetition of multiple keys map to the same value
+entrySet() // Method returns an iterable collection containing all the key-value entries in Map M
 ```
+* The image below shows the functionality of the above Map functions:
+  <img width="417" height="396" alt="image" src="https://github.com/user-attachments/assets/5953f042-a5fd-418b-922f-a9c598b1ac7f" />
+
 ## Maps in the java.util Package
 * Map ADT is a simplified version of <code>java.util.Map</code>.
 * The <code>java.util.Map</code> relies on the nested <code>java.util.Map.Entry</code> interface.
@@ -31,7 +37,7 @@ entrySet() // Method returns an iterable collection containing all the key-value
 * Consider the problem of counting the number of occurances of words in a document.
 * A map is an ideal data structure for use here, for we can use words as keys and word counts as values.
 * We begin with an empty map, mapping words to their integer frequencies.
-* We first scan through the input, considering adjacent alphabetic characters to be words, which we then convert to lowercase/
+* We first scan through the input, considering adjacent alphabetic characters to be words, which we then convert to lowercase.
 * For each word found, we attempt to retrieve its current frequency from the map using the get method, with a yet unseen word having frequency zero.
 * We then (re)set its frequency to be one more to reflect the current occurance of the word.
 * After processing the entire input, we loop through the <code>entrySet()</code> of the map to determine which word has most occurances.
@@ -55,44 +61,44 @@ entrySet() // Method returns an iterable collection containing all the key-value
   * An empty bucket may be replaced by a null reference.
 
 ### Hash Functions
-* The goal of a hash function, $h$, is to map each key $k$ to an integer in the ranhe $[0, N - 1]$, where $N$ is the capacity of the bucket array for a hash table.
+* The goal of a hash function, $h$, is to map each key $k$ to an integer in the range $[0, N - 1]$, where $N$ is the capacity of the bucket array for a hash table.
 * The main idea of this approach is to use the hash function value, $h(k)$, as an index into out bucket array, A, instead of the key $k$, which may not be appropriate for direct use as an index. That is, we store the entry $(k, v)$ in the bucket $A[h(k)]$.
 * If there are two or more keys with the same hash value, then two different entries will be mapped to the same bucket in $A$.
 * In this case, we say that a <b>collision</b> has occured.
 * There are ways of dealing with collisions, but the best strategy is to try avoid them in the first place.
 * A good hash fucntion sufficiently avoids collisions.
 * It is common to view the evaluation of a hash function, $h(k)$, as consisting of two portions:
-  1. <b>Hash code</b> - maos a key $k$ to an integer.
+  1. <b>Hash code</b> - maps a key $k$ to an integer.
   2. <b>Compression function</b> - maps the has code to an integer within a range of indices, $[0, N - ]$ for a bucket array.
  
-* The advantage of spreading the hash function into rwo such components is that the has code porion of that computation is independent of a specific has table size.
+* The advantage of spreading the hash function into two such components is that the has code porion of that computation is independent of a specific hash table size.
 * This allows the development of a general has code for each object that can be used for a has table of any size.
 * Only the compression function depends upon the table size.
 * This is particularly convinient, because the underlying bucket array for a hash table may be dynamically resized, depending on the number of entries currently stored in the map.
 
-#### Hash Codes ([Folder Here](https://github.com/thabang-m-modiba/MapsADT/tree/2aee2a93659cafec33cad1a78cf4160842925a26/HashTables))
-* The first action that a <b>hash function</b> perfoems is to take an arbitrary key $k$ in out map and compute an integer that is called the <b>hash code</b> for $k$.
+#### Hash Codes (📁 [Folder Here](https://github.com/thabang-m-modiba/MapsADT/tree/2aee2a93659cafec33cad1a78cf4160842925a26/HashTables))
+* The first action that a <b>hash function</b> performs is to take an arbitrary key $k$ in out map and compute an integer that is called the <b>hash code</b> for $k$.
 * This integer need not be in a range $[0, N-1]$, and may even be negative.
 * We desire that the set of hash codes assigned to our keys should avoid collisions.
 * For if the has codes of our keys cause collisions, then there is no hope for our <b>compression function</b> to avoid them.
-* Below are some different approaches to the implementation of has codes:
+* Below are some different approaches to the implementation of hash codes:
   - Treating the Bit representation as an integer
   - Polynomial hash codes
   - Cyclic-Shift hash codes
 #### Hash Codes in Java
 * The notion of hash codes are an internal part of the java language.
-* The <code>Object</code> class, which serves as an ancestor of all Object types, includes a default <code>hashCode()</code> method that returns a 32-bit int, which serves as an object's hasg code.
-* The default version of <code>hashCode()</code> provided by the Object class is oftern just an integer reprresentation derived from the object's memory.
+* The <code>Object</code> class, which serves as an ancestor of all Object types, includes a default <code>hashCode()</code> method that returns a 32-bit int, which serves as an object's hash code.
+* The default version of <code>hashCode()</code> provided by the Object class is often just an integer representation derived from the object's memory.
 * However, we must be careful if relying on the default version of <code>hashCode()</code> when authoring a class.
-* for hashing schemes to be reliable, it is imperative that any two objects that are viewed as "equal" to each other have the same hash code.
-* Thius is important because, if an entry is inserted into a map, and a later search is performed on a key that is considered equivalent to that entry's key, the map must recognize this as a match.
+* For hashing schemes to be reliable, it is imperative that any two objects that are viewed as "equal" to each other have the same hash code.
+* Thus is important because, if an entry is inserted into a map, and a later search is performed on a key that is considered equivalent to that entry's key, the map must recognize this as a match.
 * Therefore, when using a hash table to implement a map, we want equivalent keys to have the same hash code so that they are guaranteed to map to the same bucket.
-* More formally, if a class defines equivalence through the equals method, then that class should also provide a consistent implementation of the hashCode method, such that if <code>x.equald(y)</code>, then <code>x.hashCode() == y.hashCode()</code>.
+* More formally, if a class defines equivalence through the equals method, then that class should also provide a consistent implementation of the hashCode method, such that if <code>x.equals(y)</code>, then <code>x.hashCode() == y.hashCode()</code>.
 
 #### Compression Functions
 * The hash code for a key $k$ will typically not be suitable for immediate use with a bucket array, because the integer hash code may be negative or may exceed the capacity of the bucket array.
 * Thus, once we have determined an integer hash code for a key $k$, there is still the issue of mapping that integer into the range $[0, N-1]$.
-* Compression function is the second action performed as part of an obverall hash function.
+* Compression function is the second action performed as part of an overall hash function.
 * A good compression function minimizes the number of collisions.
 
 ##### The Division Method
@@ -110,20 +116,22 @@ entrySet() // Method returns an iterable collection containing all the key-value
 * We develop two implementations of a hash table.
   1. Using separate chaining
   2. Using open addressing with linear probing
-* While these approaches to collsion resolution are uite different, there are mny higher level commonalities to the two hashing algorithms.
+* While these approaches to collision resolution are quite different, there are many higher level commonalities to the two hashing algorithms.
 * In our design, the <code>AbstractHashMap</code> extends the <code>AbstractMap</code> class, which provides much of the functionality common to our two hash table implementation.
 * The <code>AbstractHashMap</code> class does not provide any concrete representation of a table of "buckets".
 * With separate chaining, each bucket will be a secondary map, and with open addressing, there is no tangible container for each bucket (buckets are effectively interleaved due to the probing sequences).
 * The <code>AbstractHashMap</code> class presumes the following to be abstract methods, to be implemented by each concrete subclass:
-  - <code><b>createTable()</b> // This method creates an initial empty table having size equal to a designated capacity instance variable.</code>
-  - <code<b>>bucketGet(h, k)</b> // This method mimics the public get() method, but for a key k that is known to hash to bucket h</code>
-  - <code><b>bucketPut(h, k, v)</b> // This method mimics the public put() method, but for a key k that is known to hash to bucket h</code>
-  - <code><b>bucketRemove(h, k)</b> // This method mimics the publiv remove() method, but for a key k known to hash to bucket h</code>
-  - <code><b>entrySet()</b> // This standard map method iterates through all entries of the map.</code>
+```
+createTable() // This method creates an initial empty table having size equal to a designated capacity instance variable.
+bucketGet(h, k) // This method mimics the public get() method, but for a key k that is known to hash to bucket h
+bucketPut(h, k, v) // This method mimics the public put() method, but for a key k that is known to hash to bucket h
+bucketRemove(h, k) // This method mimics the publiv remove() method, but for a key k known to hash to bucket h
+entrySet() // This standard map method iterates through all entries of the map.
+```
 
 * The <code>AbstractHashMap</code> class does provide a mathematical support in the form of a hash compression function using a randomized MAD formula and support for automatically resizing the underlying hash table when the load factor reaches a certain threshold.
-* The hashValue method relies on an original key's hash code, as returned by its <code>hashCode()</code> method, followed by MAD compression based on a prime number and the scale and shift parameters that are randomly chosen in the constructor.
-* To manage the load factor, the <code>AbstractHashMap</code> class declares a protected memberm $n$, which should equal the current number of entries in the map, however, it must rely on the subclasses to update this field from withim methods <code>bucketPut</code> and <code>bucketRemove</code>.
+* The <code>hashValue</code> method relies on an original key's hash code, as returned by its <code>hashCode()</code> method, followed by MAD compression based on a prime number and the scale and shift parameters that are randomly chosen in the constructor.
+* To manage the load factor, the <code>AbstractHashMap</code> class declares a protected member $n$, which should equal the current number of entries in the map, however, it must rely on the subclasses to update this field from withim methods <code>bucketPut</code> and <code>bucketRemove</code>.
 * If the load factor of the table increases beyond 0.5, we request a bigger table using the <code>createTable</code> method and reinsert all entries into the new table.
 
 #### Separate Chaining
